@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "sourceMap": false,
+    "declarationDir": "types",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "lib": [
+      "dom",
+      "ESNext"
+    ],
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
