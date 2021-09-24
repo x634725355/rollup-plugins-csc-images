@@ -63,7 +63,6 @@ module.exports = function () {
       if (!filter(id)) {
         return null;
       }
-      console.log('transform id', id);
 
       let reg = /['"](.*\/)(.*\.(png|jpg|jpge|gif))['"]/g;
 
