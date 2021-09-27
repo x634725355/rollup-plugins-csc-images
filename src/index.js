@@ -17,13 +17,17 @@ const mimeTypes = {
     '.svg': 'image/svg+xml',
     '.webp': 'image/webp',
 };
+const dest = __dirname.match(/.*(?=\/node_modules)/)[0] ? __dirname.match(/.*(?=\/node_modules)/)[0] : '';
 function computePath(firstPath, twoPath, alias) {
     if (!(0, path_1.isAbsolute)(firstPath)) {
         throw '第一个路径要为绝对路径';
     }
-    const aliasKey = Object.keys(alias);
+    const twoPathFirst = twoPath.match(/$.*?(?<=\/)/)[0];
     const firstObj = (0, path_1.parse)(firstPath);
-    return (0, path_1.join)(firstObj.dir, twoPath);
+    if (!alias[twoPathFirst]) {
+        return (0, path_1.join)(firstObj.dir, twoPath);
+    }
+    return (0, path_1.join)(dest, twoPath.replace(twoPathFirst, alias[twoPathFirst]));
 }
 function createFile(path) {
     try {
@@ -35,12 +39,10 @@ function createFile(path) {
         console.error('报错了', err);
     }
 }
-console.log('parse', (0, path_1.parse)('@/images/momo.png'));
 function handle(options) {
     options = Object.assign({}, defaults, options);
     const { alias, packPath } = options;
     const filter = (0, pluginutils_1.createFilter)(options.include, options.exclude);
-    const dest = __dirname.match(/.*(?=\/node_modules)/)[0] ? __dirname.match(/.*(?=\/node_modules)/)[0] : '';
     const packPathParse = (0, path_1.parse)(packPath);
     createFile((0, path_1.join)(dest, packPathParse.dir));
     createFile((0, path_1.join)(dest, packPathParse.base));
