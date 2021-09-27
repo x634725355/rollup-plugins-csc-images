@@ -1,4 +1,12 @@
-export declare function handle(options: any): {
+interface Options {
+    alias?: {
+        [propName: string]: string;
+    };
+    packPath?: string;
+    exclude?: string;
+    include?: string;
+}
+export declare function handle(options: Options): {
     name: string;
     resolveId(id: any): {
         id: any;
@@ -12,3 +20,4 @@ export declare function handle(options: any): {
         };
     };
 };
+export {};

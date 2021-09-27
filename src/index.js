@@ -7,6 +7,7 @@ const fs_1 = require("fs");
 const defaults = {
     exclude: 'node_modules/**',
     include: 'src/**',
+    packPath: 'dist/assets'
 };
 const mimeTypes = {
     '.jpg': 'image/jpeg',
@@ -16,10 +17,11 @@ const mimeTypes = {
     '.svg': 'image/svg+xml',
     '.webp': 'image/webp',
 };
-function computePath(firstPath, twoPath) {
+function computePath(firstPath, twoPath, alias) {
     if (!(0, path_1.isAbsolute)(firstPath)) {
         throw '第一个路径要为绝对路径';
     }
+    const aliasKey = Object.keys(alias);
     const firstObj = (0, path_1.parse)(firstPath);
     return (0, path_1.join)(firstObj.dir, twoPath);
 }
@@ -33,13 +35,15 @@ function createFile(path) {
         console.error('报错了', err);
     }
 }
+console.log('parse', (0, path_1.parse)('@/images/momo.png'));
 function handle(options) {
-    options = { ...defaults, ...options };
-    const { alias } = options;
+    options = Object.assign({}, defaults, options);
+    const { alias, packPath } = options;
     const filter = (0, pluginutils_1.createFilter)(options.include, options.exclude);
     const dest = __dirname.match(/.*(?=\/node_modules)/)[0] ? __dirname.match(/.*(?=\/node_modules)/)[0] : '';
-    createFile((0, path_1.join)(dest, 'dist'));
-    createFile((0, path_1.join)(dest, 'dist/assets'));
+    const packPathParse = (0, path_1.parse)(packPath);
+    createFile((0, path_1.join)(dest, packPathParse.dir));
+    createFile((0, path_1.join)(dest, packPathParse.base));
     return {
         name: 'rollup-plugins-csc-images',
         resolveId(id) {
@@ -57,9 +61,9 @@ function handle(options) {
             }
             let reg = /['"](.*\/)(.*\.(png|jpg|jpge|gif))['"]/g;
             code = code.replace(reg, (str, p1, p2) => {
-                const path = computePath(id, str.substr(1, str.length - 2));
-                (0, fs_1.copyFileSync)(path, (0, path_1.join)(dest, `./dist/assets/${p2}`));
-                return `'./assets/${p2}'`;
+                const path = computePath(id, str.substr(1, str.length - 2), alias);
+                (0, fs_1.copyFileSync)(path, (0, path_1.join)(dest, `./${packPath}/${p2}`));
+                return `'./${packPathParse.base}/${p2}'`;
             });
             return { code, map: { mappings: '' } };
         }
