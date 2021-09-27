@@ -14,7 +14,8 @@ interface Options {
 const defaults = {
   exclude: 'node_modules/**',
   include: 'src/**',
-  packPath: 'dist/assets'
+  packPath: 'dist/assets',
+  alias: {}
 };
 
 const mimeTypes = {
@@ -36,7 +37,7 @@ const dest = __dirname.match(/.*(?=\/node_modules)/)[0] ? __dirname.match(/.*(?=
  */
 function computePath(firstPath: string, twoPath: string, alias: {[propName:string]: string}) {
   if (!isAbsolute(firstPath)) { throw '第一个路径要为绝对路径'; }
-  const twoPathFirst = twoPath.match(/$.*?(?<=\/)/)[0];
+  const twoPathFirst = twoPath.match(/.*?(?<=\/)/)[0];
   const firstObj = parse(firstPath);
 
   if (!alias[twoPathFirst]) { return join(firstObj.dir, twoPath); }
@@ -58,14 +59,14 @@ function createFile(path) {
   }
 }
 
-export function handle(options: Options) {
+export function imageHandle(options: Options) {
   options = Object.assign({}, defaults, options);
   const { alias, packPath } = options;
   const filter = createFilter(options.include, options.exclude);
   const packPathParse = parse(packPath);
 
   createFile(join(dest, packPathParse.dir));
-  createFile(join(dest, packPathParse.base));
+  createFile(join(dest, packPath));
 
   return {
     name: 'rollup-plugins-csc-images',

@@ -6,7 +6,7 @@ interface Options {
     exclude?: string;
     include?: string;
 }
-export declare function handle(options: Options): {
+export declare function imageHandle(options: Options): {
     name: string;
     resolveId(id: any): {
         id: any;

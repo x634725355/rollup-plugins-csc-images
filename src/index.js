@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.handle = void 0;
-const pluginutils_1 = require("@rollup/pluginutils");
-const path_1 = require("path");
-const fs_1 = require("fs");
+import { createFilter } from '@rollup/pluginutils';
+import { isAbsolute, parse, join } from 'path';
+import { copyFileSync, existsSync, mkdirSync } from 'fs';
 const defaults = {
     exclude: 'node_modules/**',
     include: 'src/**',
-    packPath: 'dist/assets'
+    packPath: 'dist/assets',
+    alias: {}
 };
 const mimeTypes = {
     '.jpg': 'image/jpeg',
@@ -17,35 +15,37 @@ const mimeTypes = {
     '.svg': 'image/svg+xml',
     '.webp': 'image/webp',
 };
+__dirname = "/Users/zhaolinjie/MyCode/my-other/DDD/d-d-d/node_modules";
+console.log('当前路径', __dirname);
 const dest = __dirname.match(/.*(?=\/node_modules)/)[0] ? __dirname.match(/.*(?=\/node_modules)/)[0] : '';
 function computePath(firstPath, twoPath, alias) {
-    if (!(0, path_1.isAbsolute)(firstPath)) {
+    if (!isAbsolute(firstPath)) {
         throw '第一个路径要为绝对路径';
     }
-    const twoPathFirst = twoPath.match(/$.*?(?<=\/)/)[0];
-    const firstObj = (0, path_1.parse)(firstPath);
+    const twoPathFirst = twoPath.match(/.*?(?<=\/)/)[0];
+    const firstObj = parse(firstPath);
     if (!alias[twoPathFirst]) {
-        return (0, path_1.join)(firstObj.dir, twoPath);
+        return join(firstObj.dir, twoPath);
     }
-    return (0, path_1.join)(dest, twoPath.replace(twoPathFirst, alias[twoPathFirst]));
+    return join(dest, twoPath.replace(twoPathFirst, alias[twoPathFirst]));
 }
 function createFile(path) {
     try {
-        if (!(0, fs_1.existsSync)(path)) {
-            (0, fs_1.mkdirSync)(path);
+        if (!existsSync(path)) {
+            mkdirSync(path);
         }
     }
     catch (err) {
         console.error('报错了', err);
     }
 }
-function handle(options) {
+export function imageHandle(options) {
     options = Object.assign({}, defaults, options);
     const { alias, packPath } = options;
-    const filter = (0, pluginutils_1.createFilter)(options.include, options.exclude);
-    const packPathParse = (0, path_1.parse)(packPath);
-    createFile((0, path_1.join)(dest, packPathParse.dir));
-    createFile((0, path_1.join)(dest, packPathParse.base));
+    const filter = createFilter(options.include, options.exclude);
+    const packPathParse = parse(packPath);
+    createFile(join(dest, packPathParse.dir));
+    createFile(join(dest, packPath));
     return {
         name: 'rollup-plugins-csc-images',
         resolveId(id) {
@@ -64,12 +64,11 @@ function handle(options) {
             let reg = /['"](.*\/)(.*\.(png|jpg|jpge|gif))['"]/g;
             code = code.replace(reg, (str, p1, p2) => {
                 const path = computePath(id, str.substr(1, str.length - 2), alias);
-                (0, fs_1.copyFileSync)(path, (0, path_1.join)(dest, `./${packPath}/${p2}`));
+                copyFileSync(path, join(dest, `./${packPath}/${p2}`));
                 return `'./${packPathParse.base}/${p2}'`;
             });
             return { code, map: { mappings: '' } };
         }
     };
 }
-exports.handle = handle;
 ;
