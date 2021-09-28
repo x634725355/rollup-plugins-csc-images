@@ -7,8 +7,8 @@ interface Options {
     [propName:string]: string
   },
   packPath?: string;
-  exclude?: string;
-  include?: string;
+  exclude?: string | RegExp;
+  include?: string | RegExp;
 }
 
 const defaults = {
