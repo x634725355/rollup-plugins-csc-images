@@ -1,5 +1,5 @@
 import { createFilter } from '@rollup/pluginutils';
-import { isAbsolute, parse, join } from 'path';
+import { isAbsolute, parse, join, resolve } from 'path';
 import { copyFileSync, existsSync, mkdirSync } from 'fs';
 
 interface Options {
@@ -64,6 +64,8 @@ export function imageHandle(options: Options) {
   const { alias, packPath } = options;
   const filter = createFilter(options.include, options.exclude);
   const packPathParse = parse(packPath);
+  // const packageJson = require(join(dest, 'package.json'));
+
 
   createFile(join(dest, packPathParse.dir));
   createFile(join(dest, packPath));
@@ -71,6 +73,14 @@ export function imageHandle(options: Options) {
   return {
     name: 'rollup-plugins-csc-images',
     resolveId(id) {
+      // if (packageJson) {
+      //   const dependenciesNameArr = Object.keys(packageJson.dependencies);
+      //   const dependenciesRegExp = new RegExp(`.(${dependenciesNameArr.join('|')})`);
+      //   if (dependenciesRegExp.test(id)) {
+      //     return { id, external: true };
+      //   }
+      // }
+
       const reg = /.(png|jpg|jpge|gif|svg|webp)/;
       if (reg.test(id)) {
         return { id, external: true };
