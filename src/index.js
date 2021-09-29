@@ -15,8 +15,6 @@ const mimeTypes = {
     '.svg': 'image/svg+xml',
     '.webp': 'image/webp',
 };
-__dirname = "/Users/zhaolinjie/MyCode/my-other/DDD/d-d-d/node_modules";
-console.log('当前路径', __dirname);
 const dest = __dirname.match(/.*(?=\/node_modules)/)[0] ? __dirname.match(/.*(?=\/node_modules)/)[0] : '';
 function computePath(firstPath, twoPath, alias) {
     if (!isAbsolute(firstPath)) {

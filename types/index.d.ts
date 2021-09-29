@@ -3,8 +3,8 @@ interface Options {
         [propName: string]: string;
     };
     packPath?: string;
-    exclude?: string;
-    include?: string;
+    exclude?: string | RegExp;
+    include?: string | RegExp;
 }
 export declare function imageHandle(options: Options): {
     name: string;
