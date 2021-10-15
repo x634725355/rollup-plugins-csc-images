@@ -27,7 +27,9 @@ const mimeTypes = {
   '.webp': 'image/webp',
 };
 
-const dest = __dirname.match(/.*(?=\/node_modules)/)[0] ? __dirname.match(/.*(?=\/node_modules)/)[0] : '';
+const dirname = resolve(__dirname);
+
+const dest = dirname.match(/.*(?=\/node_modules)/)[0] ? dirname.match(/.*(?=\/node_modules)/)[0] : '';
 
 /**
  * 基于第一个路径返回第二个路径的绝对路径
