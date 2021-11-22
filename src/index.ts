@@ -29,7 +29,7 @@ const mimeTypes = {
 
 const dirname = resolve(__dirname);
 
-const dest = dirname.match(/.*(?=\/node_modules)/)[0] ? dirname.match(/.*(?=\/node_modules)/)[0] : '';
+const dest = dirname.match(/.*(?=[\/\\]node_modules)/)[0] ? dirname.match(/.*(?=[\/\\]node_modules)/)[0] : '';
 
 /**
  * 基于第一个路径返回第二个路径的绝对路径
