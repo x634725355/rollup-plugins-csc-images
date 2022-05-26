@@ -83,7 +83,7 @@ export function imageHandle(options: Options) {
       //   }
       // }
 
-      const reg = /.(png|jpg|jpge|gif|svg|webp)/;
+      const reg = /\.(png|jpg|jpge|gif|svg|webp)/;
       if (reg.test(id)) {
         return { id, external: true };
       }

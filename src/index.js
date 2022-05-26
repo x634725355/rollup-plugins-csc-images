@@ -19,7 +19,7 @@ const mimeTypes = {
     '.webp': 'image/webp',
 };
 const dirname = (0, path_1.resolve)(__dirname);
-const dest = dirname.match(/.*(?=\/node_modules)/)[0] ? dirname.match(/.*(?=\/node_modules)/)[0] : '';
+const dest = dirname.match(/.*(?=[\/\\]node_modules)/)[0] ? dirname.match(/.*(?=[\/\\]node_modules)/)[0] : '';
 function computePath(firstPath, twoPath, alias) {
     if (!(0, path_1.isAbsolute)(firstPath)) {
         throw '第一个路径要为绝对路径';
@@ -51,7 +51,7 @@ function imageHandle(options) {
     return {
         name: 'rollup-plugins-csc-images',
         resolveId(id) {
-            const reg = /.(png|jpg|jpge|gif|svg|webp)/;
+            const reg = /\.(png|jpg|jpge|gif|svg|webp)/;
             if (reg.test(id)) {
                 return { id, external: true };
             }
