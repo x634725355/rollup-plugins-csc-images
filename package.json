@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugins-csc-images",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "repository": "https://github.com/x634725355/rollup-plugins-csc-images.git",
   "author": "澄三彩 <634725355@qq.com>",
